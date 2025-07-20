@@ -25,6 +25,7 @@ func main() {
 
 	r.HandleFunc("/register", authHandler.Register).Methods("POST")
 	r.HandleFunc("/login", authHandler.Login).Methods("POST")
+	r.HandleFunc("/ping", authHandler.Ping).Methods("GET")
 
 	taskRouter := r.PathPrefix("/").Subrouter()
 	taskRouter.Use(middleware.WithAuth)

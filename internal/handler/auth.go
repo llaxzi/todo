@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -66,4 +67,19 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func (h *AuthHandler) Ping(w http.ResponseWriter, r *http.Request) {
+	hostname, err := os.Hostname()
+	if err != nil {
+		http.Error(w, "Unable to get hostname", http.StatusInternalServerError)
+		return
+	}
+
+	response := map[string]string{
+		"hostname": hostname,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
